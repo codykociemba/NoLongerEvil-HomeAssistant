@@ -1,0 +1,4 @@
+[submodule "vendor/nolongerevil"]
+	path = vendor/nolongerevil
+	url = https://github.com/bengalaviz/NoLongerEvil-Thermostat.git
+	branch = feature/sqlite3-backend

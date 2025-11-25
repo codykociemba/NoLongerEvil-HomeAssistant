@@ -18,3 +18,21 @@ In order to use this add-on, you must be running Home Assistant OS (as distinct 
 You can participate by following https://developers.home-assistant.io/docs/add-ons/tutorial/ to get started with developing with the add-on.
 
 Join the [#nle-home-assistant](https://discord.com/channels/1153899255598157924/1441299147922870433) channel in the NoLongerEvil Discord to discuss any questions you have about the add-on.
+
+## Setup
+
+After cloning this repository, initialize the submodules:
+
+```bash
+git clone https://github.com/codykociemba/NoLongerEvil-HomeAssistant.git
+cd sample_addon
+
+# Initialize and update submodules
+git submodule update --init --recursive
+
+# Configure sparse checkout for the NoLongerEvil submodule (only checks out the server folder)
+cd vendor/nolongerevil
+git config core.sparseCheckout true
+git sparse-checkout set server
+cd ../..
+```
