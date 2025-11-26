@@ -8,7 +8,7 @@ DEBUG_LOGGING=$(bashio::config 'debug_logging')
 ENTRY_KEY_TTL_SECONDS=$(bashio::config 'entry_key_ttl_seconds')
 
 # Container always listens on these ports
-PROXY_PORT=9543
+PROXY_PORT=8000
 CONTROL_PORT=8081
 
 # Get API_ORIGIN from user config (REQUIRED - must include port)

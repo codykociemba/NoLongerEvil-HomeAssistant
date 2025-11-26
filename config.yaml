@@ -15,10 +15,10 @@ arch:
 startup: services
 ports:
   8081/tcp: 8081
-  9543/tcp: 9543
+  8000/tcp: 9543
 ports_description:
   8081/tcp: "Control API (web interface)"
-  9543/tcp: "Proxy port (Nest device communication)"
+  8000/tcp: "Proxy port (Nest device communication)"
 map:
   - addon_config
 options:
