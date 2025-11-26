@@ -1,3 +1,4 @@
+---
 name: "NoLongerEvil HomeAssistant"
 description: "NoLongerEvil Nest API - Self-hosted Nest thermostat control"
 version: "0.0.2"

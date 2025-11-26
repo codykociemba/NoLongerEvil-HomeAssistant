@@ -1,3 +1,6 @@
+![Build](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/actions/workflows/build.yaml/badge.svg)
+![License](https://img.shields.io/github/license/codykociemba/NoLongerEvil-HomeAssistant)
+
 # Work In Progress
 
 This add-on is currently in development. Please see these related resources for more information:

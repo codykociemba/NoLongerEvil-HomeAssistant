@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
 
 bashio::log.info "Starting NoLongerEvil Add-on..."
 
@@ -17,6 +18,6 @@ bashio::log.info "  - CONTROL_PORT: ${CONTROL_PORT}"
 bashio::log.info "  - SQLITE3_DB_PATH: ${SQLITE3_DB_PATH}"
 
 # Change to app directory and start the Node.js server
-cd /app
+cd /app || exit 1
 bashio::log.info "Starting Node.js server..."
 exec node dist/index.js
