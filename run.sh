@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
 
 bashio::log.info "Starting NoLongerEvil Add-on..."
 
@@ -27,10 +28,14 @@ if bashio::services "mqtt" "host" > /dev/null 2>&1; then
     bashio::log.info "MQTT service IS available from Supervisor"
     
     # Extract MQTT credentials from Supervisor services API
-    export MQTT_HOST=$(bashio::services "mqtt" "host")
-    export MQTT_PORT=$(bashio::services "mqtt" "port")
-    export MQTT_USER=$(bashio::services "mqtt" "username")
-    export MQTT_PASSWORD=$(bashio::services "mqtt" "password")
+    MQTT_HOST=$(bashio::services "mqtt" "host")
+    export MQTT_HOST
+    MQTT_PORT=$(bashio::services "mqtt" "port")
+    export MQTT_PORT
+    MQTT_USER=$(bashio::services "mqtt" "username")
+    export MQTT_USER
+    MQTT_PASSWORD=$(bashio::services "mqtt" "password")
+    export MQTT_PASSWORD
     
     bashio::log.info "MQTT service configured:"
     bashio::log.info "  Host: ${MQTT_HOST}"
