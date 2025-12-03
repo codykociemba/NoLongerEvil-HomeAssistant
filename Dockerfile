@@ -6,25 +6,22 @@ FROM $BUILD_FROM
 # hadolint ignore=DL3018
 RUN apk add --no-cache nodejs npm
 
-# Build vendor server
-WORKDIR /server
+# Set working directory
+WORKDIR /app
+
+# Copy the vendor server source code
 COPY vendor/nolongerevil/server/package*.json ./
 COPY vendor/nolongerevil/server/tsconfig.json ./
 COPY vendor/nolongerevil/server/src ./src
-RUN npm install && npm run build
 
-# Build frontend
-WORKDIR /frontend
-COPY frontend/package*.json ./
-COPY frontend/tsconfig.json ./
-COPY frontend/src ./src
+# Install dependencies and build TypeScript
 RUN npm install && npm run build
 
 # Copy run script and set up data directory
 COPY run.sh /
 RUN chmod a+x /run.sh && mkdir -p /data
 
-# Expose ports
-EXPOSE 8000 8081 8082
+# Expose ports (80 for proxy, 8081 for control API)
+EXPOSE 9543 8081
 
 CMD [ "/run.sh" ]

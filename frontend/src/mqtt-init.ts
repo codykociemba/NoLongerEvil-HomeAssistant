@@ -23,14 +23,24 @@ async function openDb(): Promise<Database> {
 export async function initializeMqtt(): Promise<void> {
   console.log('[MQTT Init] Starting MQTT integration initialization...');
 
+  // Check if MQTT is enabled
+  const mqttEnabled = process.env.MQTT_ENABLED?.toLowerCase() === 'true';
+
+  if (!mqttEnabled) {
+    console.log('[MQTT Init] MQTT is disabled (mqtt_enabled: false)');
+    console.log('[MQTT Init] Skipping MQTT integration initialization');
+    return;
+  }
+
   // Check for required environment variables
   const mqttHost = process.env.MQTT_HOST;
   const mqttPort = process.env.MQTT_PORT;
-  const mqttUser = process.env.MQTT_USER;
+  const mqttUser = process.env.MQTT_USERNAME;
   const mqttPassword = process.env.MQTT_PASSWORD;
 
   if (!mqttHost || !mqttPort) {
-    throw new Error('Missing MQTT configuration: MQTT_HOST and MQTT_PORT required');
+    console.error('[MQTT Init] MQTT is enabled but missing required configuration');
+    throw new Error('Missing MQTT configuration: MQTT_HOST and MQTT_PORT required when mqtt_enabled is true');
   }
 
   console.log('[MQTT Init] MQTT configuration detected:');

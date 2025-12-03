@@ -238,18 +238,7 @@ async function handleRegister(
     }
     
     // Claim the entry key
-
-    // Validate entry code format: must be exactly 7 alphanumeric characters
-    if (typeof code !== 'string' || !/^[A-Z0-9]{7}$/i.test(code)) {
-      sendError(res, 400, 'Invalid entry code format. Must be exactly 7 alphanumeric characters.');
-      return;
-    }
-
-    // Normalize the code to uppercase
-    const normalizedCode = code.toUpperCase().trim();
-
-    // Claim the entry key
-    const serial = await claimEntryKey(normalizedCode, userId);
+    const serial = await claimEntryKey(code, userId);
     
     if (!serial) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
