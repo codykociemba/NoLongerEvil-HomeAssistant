@@ -24,11 +24,12 @@ Join the [#nle-home-assistant](https://discord.com/channels/1153899255598157924/
 
 ## Setup
 
-After cloning this repository, initialize the submodules:
+SSH into your Home Assistant OS server
+Clone this repository into the addons folder, then initialize the submodules:
 
 ```bash
+cd /addons
 git clone https://github.com/codykociemba/NoLongerEvil-HomeAssistant.git
-cd sample_addon
 
 # Initialize and update submodules
 git submodule update --init --recursive
