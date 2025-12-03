@@ -30,6 +30,7 @@ Clone this repository into the addons folder, then initialize the submodules:
 ```bash
 cd /addons
 git clone https://github.com/codykociemba/NoLongerEvil-HomeAssistant.git
+cd NoLongerEvil-HomeAssistant
 
 # Initialize and update submodules
 git submodule update --init --recursive
@@ -81,3 +82,4 @@ Users can change the host port in the Home Assistant add-on Network configuratio
 api_origin: "http://192.168.1.100:9543" # REQUIRED: Your HA IP + port
 entry_key_ttl_seconds: 3600 # 1 hour
 debug_logging: false # Disable debug logs
+```
