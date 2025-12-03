@@ -50,6 +50,10 @@ After installing the add-on, configure it through the Home Assistant UI:
 | `api_origin` | **Yes** | `http://homeassistant.local:9543` | Full URL where Nest devices reach this add-on (protocol + host + port) |
 | `entry_key_ttl_seconds` | No | `3600` | How long entry keys remain valid (seconds) |
 | `debug_logging` | No | `false` | Enable verbose logging for troubleshooting |
+| `mqtt_host` | No | (auto-detected) | MQTT broker hostname (leave empty to use Mosquitto add-on) |
+| `mqtt_port` | No | `1883` | MQTT broker port |
+| `mqtt_user` | No | (empty) | MQTT username for authentication |
+| `mqtt_password` | No | (empty) | MQTT password for authentication |
 
 ### Example Configuration
 
