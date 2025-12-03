@@ -1,5 +1,5 @@
 {
-  "name": "Example devcontainer for add-on repositories",
+  "name": "NoLongerEvil Home Assistant Add-on",
   "image": "ghcr.io/home-assistant/devcontainer:2-addons",
   "appPort": ["7123:8123", "7357:4357", "8081:8081", "9543:9543"],
   "postStartCommand": "bash devcontainer_bootstrap",
@@ -11,7 +11,14 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["timonwong.shellcheck", "esbenp.prettier-vscode"],
+      "extensions": [
+        "timonwong.shellcheck",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker"
+      ],
       "settings": {
         "terminal.integrated.profiles.linux": {
           "zsh": {
@@ -22,7 +29,14 @@
         "editor.formatOnPaste": false,
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "files.trimTrailingWhitespace": true
+        "files.trimTrailingWhitespace": true,
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "files.associations": {
+          "*.yaml": "yaml"
+        }
       }
     }
   },
