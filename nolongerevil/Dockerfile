@@ -1,9 +1,7 @@
 ARG BUILD_FROM
-# hadolint ignore=DL3006
 FROM $BUILD_FROM
 
 # Install Node.js and npm
-# hadolint ignore=DL3018
 RUN apk add --no-cache nodejs npm
 
 # Build vendor server

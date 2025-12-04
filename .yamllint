@@ -1,0 +1,9 @@
+---
+extends: default
+
+rules:
+  comments:
+    min-spaces-from-content: 1
+  line-length: disable
+  truthy:
+    allowed-values: ["true", "false", "on", "off"]

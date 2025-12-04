@@ -88,8 +88,8 @@ export async function initializeMqtt(): Promise<void> {
     console.log('[MQTT Init] ✅ MQTT integration initialized successfully');
     console.log(`[MQTT Init]   User ID: ${DEFAULT_USER_ID}`);
     console.log(`[MQTT Init]   Broker: ${brokerUrl}`);
-    console.log(`[MQTT Init]   Topic Prefix: nolongerevil`);
-    console.log(`[MQTT Init]   HA Discovery: enabled`);
+    console.log(`[MQTT Init]   Topic Prefix: ${mqttConfig.topicPrefix}`);
+    console.log(`[MQTT Init]   HA Discovery: ${mqttConfig.homeAssistantDiscovery ? 'enabled' : 'disabled'}`);
     
     // Verify the integration was written correctly
     const verify = await db.get(

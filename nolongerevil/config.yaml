@@ -1,21 +1,19 @@
 ---
 name: "NoLongerEvil HomeAssistant"
 description: "NoLongerEvil Nest API - Self-hosted Nest thermostat control"
-version: "0.0.4"
+url: "https://github.com/codykociemba/NoLongerEvil-HomeAssistant"
+version: "0.0.5"
 slug: "nolongerevil"
 init: false
 hassio_api: true
-hassio_role: default
 services:
   - mqtt:need
 ingress: true
 ingress_port: 8082
+panel_icon: "mdi:thermostat"
 arch:
   - aarch64
   - amd64
-  - armhf
-  - armv7
-  - i386
 startup: services
 ports:
   8082/tcp: null
@@ -31,7 +29,15 @@ options:
   api_origin: "http://homeassistant.local:9543"
   entry_key_ttl_seconds: 3600
   debug_logging: false
+  mqtt_host: ""
+  mqtt_port: 1883
+  mqtt_user: ""
+  mqtt_password: ""
 schema:
   api_origin: str
   entry_key_ttl_seconds: int
   debug_logging: bool
+  mqtt_host: str?
+  mqtt_port: port?
+  mqtt_user: str?
+  mqtt_password: password?

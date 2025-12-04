@@ -33,11 +33,31 @@ else
     exit 1
 fi
 
-# Check if MQTT service is available (REQUIRED)
-bashio::log.info "Checking for MQTT service..."
-if bashio::services "mqtt" "host" > /dev/null 2>&1; then
-    bashio::log.info "MQTT service IS available from Supervisor"
-    
+# Check for manual MQTT configuration first
+MANUAL_MQTT_HOST=$(bashio::config 'mqtt_host')
+
+if bashio::var.has_value "${MANUAL_MQTT_HOST}"; then
+    bashio::log.info "Using manual MQTT configuration..."
+    MQTT_HOST="${MANUAL_MQTT_HOST}"
+    export MQTT_HOST
+    if bashio::config.has_value 'mqtt_port'; then
+        MQTT_PORT=$(bashio::config 'mqtt_port')
+    else
+        MQTT_PORT=1883
+    fi
+    export MQTT_PORT
+    MQTT_USER=$(bashio::config 'mqtt_user')
+    export MQTT_USER
+    MQTT_PASSWORD=$(bashio::config 'mqtt_password')
+    export MQTT_PASSWORD
+
+    bashio::log.info "MQTT configured (manual):"
+    bashio::log.info "  Host: ${MQTT_HOST}"
+    bashio::log.info "  Port: ${MQTT_PORT}"
+    bashio::log.info "  User: ${MQTT_USER}"
+elif bashio::services "mqtt" "host" > /dev/null 2>&1; then
+    bashio::log.info "Using MQTT service from Supervisor..."
+
     # Extract MQTT credentials from Supervisor services API
     MQTT_HOST=$(bashio::services "mqtt" "host")
     export MQTT_HOST
@@ -47,22 +67,22 @@ if bashio::services "mqtt" "host" > /dev/null 2>&1; then
     export MQTT_USER
     MQTT_PASSWORD=$(bashio::services "mqtt" "password")
     export MQTT_PASSWORD
-    
-    bashio::log.info "MQTT service configured:"
+
+    bashio::log.info "MQTT configured (auto-discovered):"
     bashio::log.info "  Host: ${MQTT_HOST}"
     bashio::log.info "  Port: ${MQTT_PORT}"
     bashio::log.info "  User: ${MQTT_USER}"
 else
-    bashio::log.fatal "MQTT service is NOT available!"
-    bashio::log.fatal "This add-on requires the Mosquitto broker add-on."
-    bashio::log.fatal "Please install and start the Mosquitto broker add-on first."
+    bashio::log.fatal "MQTT is not configured!"
     bashio::log.fatal ""
-    bashio::log.fatal "Installation steps:"
+    bashio::log.fatal "Option 1: Install the Mosquitto broker add-on"
     bashio::log.fatal "  1. Go to Settings > Add-ons > Add-on Store"
     bashio::log.fatal "  2. Search for 'Mosquitto broker'"
-    bashio::log.fatal "  3. Install the official Mosquitto broker add-on"
-    bashio::log.fatal "  4. Start the Mosquitto broker"
-    bashio::log.fatal "  5. Restart this add-on"
+    bashio::log.fatal "  3. Install and start the Mosquitto broker"
+    bashio::log.fatal "  4. Restart this add-on"
+    bashio::log.fatal ""
+    bashio::log.fatal "Option 2: Configure MQTT manually in add-on settings"
+    bashio::log.fatal "  Set mqtt_host, mqtt_port, mqtt_user, mqtt_password"
     exit 1
 fi
 

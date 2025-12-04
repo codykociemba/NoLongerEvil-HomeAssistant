@@ -1,0 +1,9 @@
+---
+ignored:
+  # DL3006: Always tag the version of an image explicitly
+  # Ignored because BUILD_FROM is provided by Home Assistant build system
+  - DL3006
+
+  # DL3018: Pin versions in apk add
+  # Ignored to always get latest compatible versions from Alpine repos
+  - DL3018
