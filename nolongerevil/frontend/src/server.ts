@@ -4,7 +4,7 @@
 
 import * as http from 'http';
 import * as url from 'url';
-import { claimEntryKey, registerDeviceToUser, getDevicesForUser } from './device-registration';
+import { claimEntryKey, registerDeviceToUser, getDevicesForUser, deleteDeviceForUser } from './device-registration';
 
 /**
  * Main request handler
@@ -20,7 +20,7 @@ export async function handleRequest(
 
   // CORS headers for Ingress
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Ingress-Path');
 
   if (method === 'OPTIONS') {
@@ -37,6 +37,8 @@ export async function handleRequest(
       await handleDevices(req, res);
     } else if (reqUrl.endsWith('/api/register') && method === 'POST') {
       await handleRegister(req, res);
+    } else if (reqUrl.includes('/api/devices/') && method === 'DELETE') {
+      await handleDeleteDevice(req, res, reqUrl);
     } else {
       send404(res);
     }
@@ -64,6 +66,7 @@ function handleHome(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NoLongerEvil - Device Management</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7/css/materialdesignicons.min.css">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -180,19 +183,44 @@ function handleHome(
       try {
         const response = await fetch(BASE_PATH + '/api/devices');
         const devices = await response.json();
-        
+
         if (devices.length === 0) {
           deviceList.innerHTML = '<p><em>No devices registered yet</em></p>';
         } else {
-          deviceList.innerHTML = '<ul>' + 
+          deviceList.innerHTML = '<ul style="list-style: none; padding: 0;">' +
             devices.map(d => {
               const date = new Date(d.createdAt);
-              return '<li><strong>' + d.serial + '</strong> - Registered ' + date.toLocaleString() + '</li>';
+              return '<li style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee;">' +
+                '<span><strong>' + d.serial + '</strong> - Registered ' + date.toLocaleString() + '</span>' +
+                '<button onclick="deleteDevice(\\'' + d.serial + '\\')" style="background: #dc3545; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer;" title="Delete device"><i class="mdi mdi-delete"></i></button>' +
+                '</li>';
             }).join('') +
             '</ul>';
         }
       } catch (error) {
         deviceList.innerHTML = '<p style="color: red;">Error loading devices</p>';
+      }
+    }
+
+    async function deleteDevice(serial) {
+      if (!confirm('Are you sure you want to delete device ' + serial + '?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(BASE_PATH + '/api/devices/' + encodeURIComponent(serial), {
+          method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          loadDevices();
+        } else {
+          alert('Failed to delete device: ' + result.message);
+        }
+      } catch (error) {
+        alert('Error deleting device: ' + error.message);
       }
     }
   </script>
@@ -218,6 +246,43 @@ async function handleDevices(
   } catch (error) {
     console.error('[Frontend] Error fetching devices:', error);
     sendError(res, 500, 'Failed to fetch devices');
+  }
+}
+
+/**
+ * Handle DELETE /api/devices/:serial
+ */
+async function handleDeleteDevice(
+  _req: http.IncomingMessage,
+  res: http.ServerResponse,
+  reqUrl: string
+): Promise<void> {
+  try {
+    // Extract serial from URL (e.g., /api/devices/ABC123)
+    const match = reqUrl.match(/\/api\/devices\/([^/?]+)/);
+    if (!match || !match[1]) {
+      sendError(res, 400, 'Missing device serial');
+      return;
+    }
+
+    const serial = decodeURIComponent(match[1]);
+
+    // Validate serial format
+    if (!/^[A-Za-z0-9_-]+$/.test(serial)) {
+      sendError(res, 400, 'Invalid device serial format');
+      return;
+    }
+
+    const deleted = await deleteDeviceForUser('homeassistant', serial);
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      success: deleted,
+      message: deleted ? `Device ${serial} deleted` : `Device ${serial} not found`
+    }));
+  } catch (error) {
+    console.error('[Frontend] Error deleting device:', error);
+    sendError(res, 500, 'Failed to delete device');
   }
 }
 
