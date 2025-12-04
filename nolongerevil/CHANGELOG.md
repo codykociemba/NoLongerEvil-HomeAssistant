@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Device deletion from web UI
 - DELETE /api/devices/:serial endpoint for removing device ownership
-- Material Design Icons integration for UI elements
+- Automatic Home Assistant discovery cleanup when device is deleted
 
 ## [0.0.5] - 2025
 
