@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.5] - 2024
+## [0.0.6] - 2025
+
+### Added
+- Device deletion from web UI
+- DELETE /api/devices/:serial endpoint for removing device ownership
+- Automatic Home Assistant discovery cleanup when device is deleted
+
+## [0.0.5] - 2025
 
 ### Changed
 - Repository restructured for Home Assistant add-on store compatibility
@@ -27,13 +34,13 @@ All notable changes to this project will be documented in this file.
 - Fixed MQTT integration not loading (getAllEnabledMqttIntegrations was returning null)
 - Fixed hardcoded log values in mqtt-init.ts
 
-## [0.0.4] - 2024
+## [0.0.4] - 2025
 
 ### Fixed
 - Linter errors resolved
 - Removed `dist` folder from Git tracking
 
-## [0.0.3] - 2024
+## [0.0.3] - 2025
 
 ### Added
 - Initial public release

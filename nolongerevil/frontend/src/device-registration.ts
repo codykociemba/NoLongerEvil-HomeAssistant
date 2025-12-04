@@ -135,17 +135,41 @@ export async function registerDeviceToUser(userId: string, serial: string): Prom
  */
 export async function getDevicesForUser(userId: string): Promise<Array<{ serial: string; createdAt: number }>> {
   const db = await openDb();
-  
+
   try {
     const devices = await db.all(
-      `SELECT serial, createdAt 
+      `SELECT serial, createdAt
        FROM deviceOwners
        WHERE userId = ?
        ORDER BY createdAt DESC`,
       [userId]
     );
-    
+
     return devices;
+  } finally {
+    await db.close();
+  }
+}
+
+/**
+ * Delete a device ownership record for a user
+ */
+export async function deleteDeviceForUser(userId: string, serial: string): Promise<boolean> {
+  const db = await openDb();
+
+  try {
+    const result = await db.run(
+      'DELETE FROM deviceOwners WHERE userId = ? AND serial = ?',
+      [userId, serial]
+    );
+
+    if (result.changes && result.changes > 0) {
+      console.log(`[DeviceReg] ✅ Deleted device ${serial} for user ${userId}`);
+      return true;
+    }
+
+    console.warn(`[DeviceReg] Device ${serial} not found for user ${userId}`);
+    return false;
   } finally {
     await db.close();
   }
