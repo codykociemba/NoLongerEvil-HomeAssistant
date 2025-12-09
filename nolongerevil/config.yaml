@@ -2,7 +2,7 @@
 name: "NoLongerEvil HomeAssistant"
 description: "NoLongerEvil Nest API - Self-hosted Nest thermostat control"
 url: "https://github.com/codykociemba/NoLongerEvil-HomeAssistant"
-version: "0.0.7"
+version: "0.1.0"
 slug: "nolongerevil"
 init: false
 hassio_api: true
@@ -17,11 +17,9 @@ arch:
 startup: services
 ports:
   8082/tcp: null
-  8081/tcp: null
   8000/tcp: 9543
 ports_description:
-  8082/tcp: "Frontend UI (Ingress only)"
-  8081/tcp: "Control API (internal only)"
+  8082/tcp: "Control API + Web UI (Ingress only)"
   8000/tcp: "Proxy port (Nest device communication)"
 map:
   - addon_config
