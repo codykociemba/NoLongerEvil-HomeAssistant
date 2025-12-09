@@ -86,7 +86,7 @@ else
     exit 1
 fi
 
-# Set environment variables for Node.js
+# Set environment variables for Python server
 export API_ORIGIN
 export PROXY_PORT
 export CONTROL_PORT
@@ -94,7 +94,6 @@ export INGRESS_PORT
 export ENTRY_KEY_TTL_SECONDS
 export DEBUG_LOGGING
 export DEBUG_LOGS_DIR=/data/debug-logs
-export SQLITE3_ENABLED=true
 export SQLITE3_DB_PATH=/data/database.sqlite
 
 bashio::log.info "Configuration:"
@@ -108,10 +107,9 @@ bashio::log.info "  MQTT_PORT: ${MQTT_PORT}"
 bashio::log.info ""
 bashio::log.info "Nest devices will connect to: ${API_ORIGIN}"
 
-# Start the vendor API server FIRST (creates database tables)
+# Start the Python API server FIRST (creates database tables)
 bashio::log.info "Starting API server..."
-cd /server || exit 1
-node dist/index.js &
+python3 -m nolongerevil.main &
 SERVER_PID=$!
 bashio::log.info "API server started (PID: ${SERVER_PID})"
 

@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.8] - Dec 8, 2025
+
+### Python Server Migration
+
+Migrated backend server from Node.js/TypeScript to Python for improved maintainability and performance.
+
+### Changed
+
+- Switched submodule from `NoLongerEvil-Thermostat` to `NoLongerEvil-SelfHosted` (feature/python-port branch)
+- Backend server now runs on Python 3.12 with aiohttp, pydantic, and aiomqtt
+- Dockerfile updated to install Python and pip instead of building Node.js server
+- Server startup changed from `node dist/index.js` to `python3 -m nolongerevil.main`
+- Removed unused TypeScript path mapping in frontend tsconfig
+
+### Technical Details
+
+- Python server uses same API endpoints and database schema for compatibility
+- Frontend (Node.js) remains unchanged - still handles Ingress UI and MQTT initialization
+- No changes to configuration options or port mappings
+
 ## [0.0.7] - Dec 6, 2025
 
 ### Device Availability Tracking and MQTT State Management Improvements

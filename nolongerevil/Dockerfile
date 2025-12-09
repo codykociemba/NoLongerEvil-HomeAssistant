@@ -1,15 +1,14 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-# Install Node.js and npm
-RUN apk add --no-cache nodejs npm
+# Install Python and Node.js
+RUN apk add --no-cache python3 py3-pip nodejs npm
 
-# Build vendor server
+# Build Python server
 WORKDIR /server
-COPY vendor/nolongerevil/server/package*.json ./
-COPY vendor/nolongerevil/server/tsconfig.json ./
-COPY vendor/nolongerevil/server/src ./src
-RUN npm install && npm run build
+COPY server/pyproject.toml server/README.md ./
+COPY server/src ./src
+RUN pip3 install --no-cache-dir --break-system-packages .
 
 # Build frontend
 WORKDIR /frontend

@@ -1,4 +1,4 @@
-[submodule "nolongerevil/vendor/nolongerevil"]
-	path = nolongerevil/vendor/nolongerevil
-	url = https://github.com/codykociemba/NoLongerEvil-Thermostat.git
-	branch = open-source-prototype
+[submodule "nolongerevil/server"]
+	path = nolongerevil/server
+	url = https://github.com/codykociemba/NoLongerEvil-SelfHosted.git
+	branch = feature/python-port
