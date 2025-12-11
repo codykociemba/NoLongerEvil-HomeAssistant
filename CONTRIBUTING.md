@@ -19,11 +19,11 @@ cd NoLongerEvil-HomeAssistant
 # Initialize submodules
 git submodule update --init --recursive
 
-# Configure sparse checkout for the vendor submodule
-cd nolongerevil/vendor/nolongerevil
+# Configure sparse checkout for the server submodule
+cd nolongerevil/server
 git config core.sparseCheckout true
 git sparse-checkout set server
-cd ../../..
+cd ../..
 ```
 
 ### Local Development
