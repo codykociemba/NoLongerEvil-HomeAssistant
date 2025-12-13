@@ -5,7 +5,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/codykociemba/NoLongerEvil-HomeAssistant)](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/releases)
 [![Home Assistant Add-on](https://img.shields.io/badge/Home%20Assistant-Add--on-blue.svg)](https://www.home-assistant.io/addons/)
 
-A Home Assistant add-on that provides self-hosted Nest thermostat control via the NoLongerEvil API. Control your Nest thermostats locally without relying on external cloud services.
+A Home Assistant Add-on that provides self-hosted Nest thermostat control via the NoLongerEvil API. Control your Nest thermostats locally without relying on external cloud services.
 
 ## Installation
 
@@ -15,11 +15,13 @@ A Home Assistant add-on that provides self-hosted Nest thermostat control via th
 
    [![Add Repository](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fcodykociemba%2FNoLongerEvil-HomeAssistant)
 
-2. Find **NoLongerEvil HomeAssistant** in the add-on store and click **Install**
+2. Find **NoLongerEvil HomeAssistant** in the Add-on store and click **Install**
 
-3. Configure the add-on (see [Configuration](#configuration) below)
+3. Configure the Add-on (see [Configuration](#configuration) below)
 
-4. Start the add-on
+4. Start the Add-on
+5. Select "Watchdog" to restart the server if it crashes
+6. (Optional) Select "Add to sidebar" for ease of use during thermostat configuration
 
 ### Manual Installation
 
@@ -43,7 +45,7 @@ A Home Assistant add-on that provides self-hosted Nest thermostat control via th
 
 ## Configuration
 
-After installing the add-on, configure it through the Home Assistant UI:
+After installing the add-on, configure it on the "Configuration" tab via the Home Assistant UI:
 
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
@@ -55,7 +57,7 @@ After installing the add-on, configure it through the Home Assistant UI:
 | `mqtt_user` | No | (empty) | MQTT username for authentication |
 | `mqtt_password` | No | (empty) | MQTT password for authentication |
 
-### Example Configuration
+### Example Final Configuration
 
 ```yaml
 api_origin: "http://192.168.1.100:9543"
@@ -71,11 +73,34 @@ debug_logging: false
 | 8081 | Control API | Internal only |
 | 8082 | Web UI | Ingress only |
 
-## Usage
+## Thermostat Configuration - ssh
+If the firmware flashing process did not ask how you want to connect the device, you'll need to configure the thermostat for self-hosting. (Feature is still to come.)
+1. ssh to your thermostat
+   ```
+   ssh root@<nest_ip>
+   ```
+2. Password is 
+   ```
+   nolongerevil
+   ```
+3. Use vi to edit the config file 
+   ```
+   vi /etc/nestlabs/client.config
+   ```
+5. Press "i" to edit
+6. Find ```<a key="cloudregisterurl" value="https://backdoor.nolongerevil.com/"/>``` and update to 
+   ```
+   <a key="cloudregisterurl" value="http://<homeassistant_IP>:9543/entry"/>
+   ```
+8. Press escape to exit vi edit mode, then ```:wq``` to exit and save
+9. Enter ```reboot``` to reboot your device
+10. On the thermostat, generate an entry key for device pairing
 
-1. Open the add-on Web UI via the **Open Web UI** button
-2. Generate an entry key for device pairing
-3. Follow the on-screen instructions to pair your Nest thermostat
+## Register with NLE Add-on - Home Assistant
+
+1. Change the `api_origin` to ```http://<homeassistant_IP>:9543```
+2. Save your changes and restart the Add-on
+3. In the Home Assistant NLE Web UI, enter the 7-character pairing code from your Nest thermostat and click Register
 4. Devices will appear in Home Assistant via MQTT discovery
 
 ## Community
