@@ -49,15 +49,17 @@ After installing the add-on, configure it on the "Configuration" tab via the Hom
 
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
-| `api_origin` | **Yes** | `http://homeassistant.local:9543` | Full URL where Nest devices reach this add-on (protocol + host + port) |
+| `api_origin` | **Yes** | `http://<homeassistant_IP>:9543` | Full URL where Nest devices reach this add-on (protocol + host + port) |
 | `entry_key_ttl_seconds` | No | `3600` | How long entry keys remain valid (seconds) |
 | `debug_logging` | No | `false` | Enable verbose logging for troubleshooting |
 | `mqtt_host` | No | (auto-detected) | MQTT broker hostname (leave empty to use Mosquitto add-on) |
 | `mqtt_port` | No | `1883` | MQTT broker port |
-| `mqtt_user` | No | (empty) | MQTT username for authentication |
-| `mqtt_password` | No | (empty) | MQTT password for authentication |
+| `mqtt_user` | No | (empty*) | MQTT username for authentication |
+| `mqtt_password` | No | (empty*) | MQTT password for authentication |
 
-### Example Final Configuration
+* Fields can be empty under HAOS. Enter your credentials if you're using an external MQTT broker. 
+
+### Example Configuration
 
 ```yaml
 api_origin: "http://192.168.1.100:9543"
@@ -74,7 +76,7 @@ debug_logging: false
 | 8082 | Web UI | Ingress only |
 
 ## Thermostat Configuration - ssh
-If the firmware flashing process did not ask how you want to connect the device, you'll need to configure the thermostat for self-hosting. (Feature is still to come.)
+If the firmware flashing process (https://docs.nolongerevil.com/hosted/overview) did not ask how you want to connect the device, you'll need to configure the thermostat for self-hosting. (Choice of hosted or self-hosted feature during flashing is pending.)
 1. ssh to your thermostat
    ```
    ssh root@<nest_ip>
@@ -92,16 +94,16 @@ If the firmware flashing process did not ask how you want to connect the device,
    ```
    <a key="cloudregisterurl" value="http://<homeassistant_IP>:9543/entry"/>
    ```
-8. Press escape to exit vi edit mode, then ```:wq``` to exit and save
-9. Enter ```reboot``` to reboot your device
-10. On the thermostat, generate an entry key for device pairing
+   DO NOT OMIT /entry FROM THE URL
+8. Press escape to exit vi edit mode, then ```:wq``` to write the file and quit the vi editor
+9. Enter ```reboot``` to reboot your device.
+10. Once rebooted, on the thermostat, go to Settings (gear icon) -> Nest App -> Get Entry Key to generate an entry key for device pairing.
 
-## Register with NLE Add-on - Home Assistant
+## Register with NoLongerEvil Add-on in Home Assistant
 
-1. Change the `api_origin` to ```http://<homeassistant_IP>:9543```
-2. Save your changes and restart the Add-on
-3. In the Home Assistant NLE Web UI, enter the 7-character pairing code from your Nest thermostat and click Register
-4. Devices will appear in Home Assistant via MQTT discovery
+1. Go to Home Assistant > Settings > Add Ons > NoLongerEvil HomeAssistant > Configuration
+2. In the Home Assistant NLE Web UI, enter the 7-character pairing code from your Nest thermostat and click Register
+3. Devices will appear in Home Assistant via MQTT discovery
 
 ## Community
 
