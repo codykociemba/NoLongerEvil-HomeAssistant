@@ -67,9 +67,7 @@ debug_logging: false
 
 | Port | Purpose | Access |
 |------|---------|--------|
-| 9543 (host) → 8000 (container) | Nest device communication | External (configurable) |
-| 8081 | Control API | Internal only |
-| 8082 | Web UI | Ingress only |
+| 9543 (host) → 8080 (container) | Nest device communication | Web UI | Control AP (configurable) |
 
 ## Usage
 

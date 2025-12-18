@@ -9,18 +9,16 @@ hassio_api: true
 services:
   - mqtt:need
 ingress: true
-ingress_port: 8082
+ingress_port: 9543
 panel_icon: "mdi:thermostat"
 arch:
   - aarch64
   - amd64
 startup: services
 ports:
-  8082/tcp: null
-  8000/tcp: 9543
+  8080/tcp: 9543
 ports_description:
-  8082/tcp: "Control API + Web UI (Ingress only)"
-  8000/tcp: "Proxy port (Nest device communication)"
+  8080/tcp: "Proxy port (Nest device communication + Web UI)"
 map:
   - addon_config
 options:

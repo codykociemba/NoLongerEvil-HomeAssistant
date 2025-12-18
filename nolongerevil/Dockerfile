@@ -14,7 +14,7 @@ RUN pip3 install --no-cache-dir --break-system-packages .
 COPY run.sh /
 RUN chmod a+x /run.sh && mkdir -p /data
 
-# Expose ports (8000 for device API, 8082 for control API + web UI)
-EXPOSE 8000 8082
+# Expose ports (8080 for device API + web UI)
+EXPOSE 8080
 
 CMD [ "/run.sh" ]

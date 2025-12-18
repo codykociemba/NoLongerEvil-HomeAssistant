@@ -8,8 +8,7 @@ DEBUG_LOGGING=$(bashio::config 'debug_logging')
 ENTRY_KEY_TTL_SECONDS=$(bashio::config 'entry_key_ttl_seconds')
 
 # Container always listens on these ports
-PROXY_PORT=8000
-CONTROL_PORT=8082
+PROXY_PORT=8080
 
 # Get API_ORIGIN from user config (REQUIRED - must include port)
 if bashio::config.has_value 'api_origin'; then
@@ -88,7 +87,6 @@ fi
 # Set environment variables for Python server
 export API_ORIGIN
 export PROXY_PORT
-export CONTROL_PORT
 export ENTRY_KEY_TTL_SECONDS
 export DEBUG_LOGGING
 export DEBUG_LOGS_DIR=/data/debug-logs
@@ -96,8 +94,7 @@ export SQLITE3_DB_PATH=/data/database.sqlite
 
 bashio::log.info "Configuration:"
 bashio::log.info "  API_ORIGIN: ${API_ORIGIN}"
-bashio::log.info "  PROXY_PORT: ${PROXY_PORT} (device API)"
-bashio::log.info "  CONTROL_PORT: ${CONTROL_PORT} (control API + web UI)"
+bashio::log.info "  PROXY_PORT: ${PROXY_PORT} (device API + web UI)"
 bashio::log.info "  DEBUG_LOGGING: ${DEBUG_LOGGING}"
 bashio::log.info "  MQTT_HOST: ${MQTT_HOST}"
 bashio::log.info "  MQTT_PORT: ${MQTT_PORT}"
