@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0] - Dec 11, 2025
+
+### Frontend Consolidation
+
+Migrated backend server from Node.js/TypeScript to Python for improved maintainability and performance.
+Eliminated the Node.js frontend entirely by consolidating all functionality into the Python server.
+
+### Changed
+
+- Web UI now served directly from Python server on port 8082
+- Removed Node.js/npm from Docker image
+- MQTT and user initialization moved to Python server startup
+
+### Removed
+
+- Entire `frontend/` directory
+- Node.js runtime dependency
+
+### Added
+
+- Health check endpoint at `/health`
+
+### Technical Details
+
+- Web UI served via aiohttp from `routes/control/templates/index.html`
+- Ingress path injected via `data-ingress-path` attribute on body tag
+
 ## [0.0.7] - Dec 6, 2025
 
 ### Device Availability Tracking and MQTT State Management Improvements
