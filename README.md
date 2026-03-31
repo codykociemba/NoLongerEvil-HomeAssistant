@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/actions/workflows/build.yaml/badge.svg)](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/actions/workflows/build.yaml)
 [![License](https://img.shields.io/github/license/codykociemba/NoLongerEvil-HomeAssistant)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v0.2.0-blue)](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/releases/tag/v0.2.0)
+[![Release](https://img.shields.io/github/v/release/codykociemba/NoLongerEvil-HomeAssistant)](https://github.com/codykociemba/NoLongerEvil-HomeAssistant/releases/latest)
 [![Home Assistant Add-on](https://img.shields.io/badge/Home%20Assistant-Add--on-blue.svg)](https://www.home-assistant.io/addons/)
 [![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/hackhouse)
 
