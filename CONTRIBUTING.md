@@ -25,10 +25,7 @@ Follow the [Home Assistant Add-on Development Tutorial](https://developers.home-
 ### Building Locally
 
 ```bash
-cd nolongerevil
-docker build \
-  --build-arg BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest \
-  -t nolongerevil-addon .
+docker build -t nolongerevil-addon ./nolongerevil
 ```
 
 ### Testing

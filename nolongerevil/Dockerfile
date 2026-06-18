@@ -1,8 +1,5 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/base:latest
+ARG BUILD_FROM=ghcr.io/home-assistant/base-python:3.12-alpine3.24
 FROM $BUILD_FROM
-
-# Install dependencies
-RUN apk add --no-cache python3 py3-pip
 
 # Build Python server
 WORKDIR /server
