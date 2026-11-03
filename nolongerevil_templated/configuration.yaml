@@ -1,0 +1,158 @@
+########## DEFAULT configuration.yaml ##########
+# # Loads default set of integrations. Do not remove.
+# default_config:
+
+# # Load frontend themes from the themes folder
+# frontend:
+#   themes: !include_dir_merge_named themes
+
+# automation: !include automations.yaml
+# script: !include scripts.yaml
+# scene: !include scenes.yaml
+
+########## NLE Template APIs #################
+rest:
+  - resource: "http://<your_standalone_server_ip>:8082/status?serial=<first thermostat serial>"
+    scan_interval: 60  # How often to poll the API (in seconds)
+    sensor:
+      - name: "First Thermostat Current Temperature"
+        value_template: "{{ value_json.current_temperature }}"
+        device_class: temperature
+        unit_of_measurement: "°C"
+        
+      - name: "First Thermostat Target Temperature"
+        value_template: "{{ value_json.target_temperature }}"
+        device_class: temperature
+        unit_of_measurement: "°C"
+
+      - name: "First Thermostat Mode"
+        value_template: "{{ value_json.mode }}"
+
+      - name: "First Thermostat Humidity"
+        value_template: "{{ value_json.humidity }}"
+
+      - name: "First Thermostat Fan Mode"
+        value_template: "{{ 'on' if value_json.fan_timer_active else 'auto' }}"
+
+  # - resource: "http://<your_standalone_server_ip>:8082/status?serial=<second thermostat serial>"
+  #   scan_interval: 60  # How often to poll the API (in seconds)
+  #   sensor:
+  #     - name: "Second Thermostat Current Temperature"
+  #       value_template: "{{ value_json.current_temperature }}"
+  #       device_class: temperature
+  #       unit_of_measurement: "°C"
+        
+  #     - name: "Second Thermostat Target Temperature"
+  #       value_template: "{{ value_json.target_temperature }}"
+  #       device_class: temperature
+  #       unit_of_measurement: "°C"
+
+  #     - name: "Second Thermostat Mode"
+  #       value_template: "{{ value_json.mode }}"
+
+  #     - name: "Second Thermostat Humidity"
+  #       value_template: "{{ value_json.humidity }}"
+
+  #     - name: "Second Thermostat Fan Mode"
+  #       value_template: "{{ 'on' if value_json.fan_timer_active else 'auto' }}"
+
+template:
+  climate:
+    - name: "First Thermostat"
+      unique_id: first_thermostat_thermostat_rest
+      
+      # Read States from REST Sensors
+      current_temperature: "{{ states('sensor.first_thermostat_current_temperature') | float(21.0) }}"
+      target_temperature: "{{ states('sensor.first_thermostat_target_temperature') | float(21.0) }}"
+      current_humidity: "{{ states('sensor.first_thermostat_humidity') | float(21.0) }}"
+      hvac_mode: "{{ states('sensor.first_thermostat_mode') }}"
+      fan_mode: "{{ states('sensor.first_thermostat_fan_mode') }}"
+      
+      # Available Modes
+      hvac_modes: "{{ ['off', 'heat', 'cool'] }}"
+      fan_modes: "{{ ['auto', 'on'] }}"
+      
+      # Write Actions (Triggers REST commands when you click UI buttons)
+      set_temperature:
+        action: rest_command.first_thermostat_set_temp
+        data:
+          temperature: "{{ ((temperature - 32) * 5 / 9) | round(1) }}"
+      set_hvac_mode:
+        action: rest_command.first_thermostat_set_mode
+        data:
+          hvac_mode: "{{ hvac_mode }}"
+      set_fan_mode:
+        action: rest_command.first_thermostat_set_fan_mode
+        data:
+          fan_mode: "{{ fan_mode }}"
+
+    # - name: "Second Thermostat"
+    #   unique_id: second_thermostat_thermostat_rest
+      
+    #   # Read States from REST Sensors
+    #   current_temperature: "{{ states('sensor.second_thermostat_current_temperature') | float(21.0) }}"
+    #   target_temperature: "{{ states('sensor.second_thermostat_target_temperature') | float(21.0) }}"
+    #   current_humidity: "{{ states('sensor.second_thermostat_room_humidity') | float(21.0) }}"
+    #   hvac_mode: "{{ states('sensor.second_thermostat_mode') }}"
+    #   fan_mode: "{{ states('sensor.second_thermostat_fan_mode') }}"
+
+    #   # Available Modes
+    #   hvac_modes: "{{ ['off', 'heat', 'cool'] }}"
+    #   fan_modes: "{{ ['auto', 'on'] }}"
+      
+    #   # Write Actions (Triggers REST commands when you click UI buttons)
+    #   set_temperature:
+    #     action: rest_command.second_thermostat_set_temp
+    #     data:
+    #       temperature: "{{ ((temperature - 32) * 5 / 9) | round(1) }}"
+    #   set_hvac_mode:
+    #     action: rest_command.second_thermostat_set_mode
+    #     data:
+    #       hvac_mode: "{{ hvac_mode }}"
+    #   set_fan_mode:
+    #     action: rest_command.second_thermostat_set_fan_mode
+    #     data:
+    #       fan_mode: "{{ fan_mode }}"
+
+rest_command:
+  first_thermostat_set_temp:
+    url: "http://<your_standalone_server_ip>:8082/command"
+    method: POST
+    headers:
+      content-type: "application/json"
+    payload: '{"serial":"<first thermostat serial>", "command":"set_temperature", "value": {{ temperature }} }'
+
+  first_thermostat_set_mode:
+    url: "http://<your_standalone_server_ip>:8082/command"
+    method: POST
+    headers:
+      content-type: "application/json"
+    payload: '{"serial":"<first thermostat serial>","command":"set_mode","value": "{{ hvac_mode }}" }'
+
+  first_thermostat_set_fan_mode:
+    url: "http://<your_standalone_server_ip>:8082/command"
+    method: POST
+    headers:
+      content-type: "application/json"
+    payload: '{"serial":"<first thermostat serial>","command":"set_fan","value": "{{ fan_mode }}" }'    
+
+  # second_thermostat_set_temp:
+  #   url: "http://<your_standalone_server_ip>:8082/command"
+  #   method: POST
+  #   headers:
+  #     content-type: "application/json"
+  #   payload: '{"serial":"<second thermostat serial>", "command":"set_temperature", "value": {{ temperature }} }'
+
+  # second_thermostat_set_mode:
+  #   url: "http://<your_standalone_server_ip>:8082/command"
+  #   method: POST
+  #   headers:
+  #     content-type: "application/json"
+  #   payload: '{"serial":"<second thermostat serial>","command":"set_mode","value": "{{ hvac_mode }}" }'    
+
+  # second_thermostat_set_mode:
+  #   url: "http://<your_standalone_server_ip>:8082/command"
+  #   method: POST
+  #   headers:
+  #     content-type: "application/json"
+  #   payload: '{"serial":"<second thermostat serial>","command":"set_fan","value": "{{ fan_mode }}" }'        
